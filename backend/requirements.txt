@@ -1,0 +1,9 @@
+Django==4.2.9
+psycopg[binary]
+tzdata
+djangorestframework
+djangorestframework-simplejwt
+drf-spectacular
+django-filter
+whitenoise
+django-ckeditor-5
