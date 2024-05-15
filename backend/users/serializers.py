@@ -9,7 +9,7 @@ class UserSerializers(serializers.ModelSerializer):
             "username",
             "phone_number",
             "first_name",
-            "last_name",
+            "second_name",
             "email",
             "password",
         ]

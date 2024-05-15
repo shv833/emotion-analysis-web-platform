@@ -161,7 +161,8 @@ cython_debug/
 minio/
 .DS_Store
 
-# migrations/
+migrations/
+!migrations/__init__.py
 
 .idea/
 staticfiles/
