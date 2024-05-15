@@ -7,3 +7,4 @@ drf-spectacular
 django-filter
 whitenoise
 django-ckeditor-5
+django-cors-headers

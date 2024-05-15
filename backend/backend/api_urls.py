@@ -2,6 +2,7 @@ from django.urls import include, path
 
 
 urlpatterns = [
-    # path('events/', include('events.urls')),
-    # path('users/', include('users.urls')),
+    path("courses/", include("courses.urls")),
+    path("groups/", include("groups.urls")),
+    path("users/", include("users.urls")),
 ]
