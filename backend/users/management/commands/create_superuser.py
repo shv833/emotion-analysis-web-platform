@@ -13,7 +13,7 @@ class Command(BaseCommand):
                 username="admin",
                 phone_number="+380998887766",
                 email="admin@admin.com",
-                password="12321",
+                password="admin",
                 role=[User.ADMIN],
             )
             self.stdout.write(self.style.SUCCESS("Superuser created successfully"))

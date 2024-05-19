@@ -15,8 +15,8 @@ from pathlib import Path
 import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
-PROJECT_DIR = Path(__file__).resolve().parent
-BASE_DIR = PROJECT_DIR.parent
+PROJECT_DIR = Path(__file__).resolve().parent.parent
+BASE_DIR = PROJECT_DIR.parent.parent
 
 # print(f'project dir:\n {os.listdir(PROJECT_DIR)}')
 # print(f'base dir:\n {os.listdir(BASE_DIR)}')
@@ -57,9 +57,12 @@ INSTALLED_APPS = [
     "users",
     "groups",
     "courses",
+    "debug_toolbar",
+    "django_hosts",
 ]
 
 MIDDLEWARE = [
+    "django_hosts.middleware.HostsRequestMiddleware",
     "corsheaders.middleware.CorsMiddleware",
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
@@ -69,9 +72,9 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
+    "debug_toolbar.middleware.DebugToolbarMiddleware",
+    "django_hosts.middleware.HostsResponseMiddleware",
 ]
-
-ROOT_URLCONF = "backend.urls"
 
 TEMPLATES = [
     {
@@ -188,7 +191,6 @@ AUTH_USER_MODEL = "users.User"
 # DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
 
 APPEND_SLASH = True
-
 
 # CKEditor
 
@@ -322,3 +324,29 @@ CKEDITOR_5_CONFIGS = {
         "htmlSupport": {"allow": [{"name": "/.*/", "attributes": True, "classes": True, "styles": True}]},
     },
 }
+
+# Configure subdomains
+ROOT_URLCONF = "backend.urls.api"
+ROOT_HOSTCONF = "backend.hosts"
+DEFAULT_HOST = "api"
+
+# Debugger
+INTERNAL_IPS = [
+    "127.0.0.1",
+]
+
+
+def show_toolbar(request):
+    return True
+
+
+DEBUG_TOOLBAR_CONFIG = {
+    "SHOW_TOOLBAR_CALLBACK": show_toolbar,
+}
+
+# CORS and CSRF
+CORS_ALLOWED_ORIGINS = [f"http://{i}" for i in ALLOWED_HOSTS]
+CSRF_COOKIE_DOMAIN = optional("CSRF_COOKIE_DOMAIN", ".localhost")
+CSRF_TRUSTED_ORIGINS = [f"http://{i}" for i in ALLOWED_HOSTS]
+CSRF_COOKIE_SAMESITE = "None"
+CSRF_COOKIE_SECURE = True

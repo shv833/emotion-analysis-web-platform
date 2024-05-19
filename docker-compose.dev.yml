@@ -9,16 +9,22 @@ services:
       - db
     env_file:
       - .env.dev
-  # front:
-  #   build: 
-  #     context: frontend
-  #     dockerfile: Dockerfile.dev
-  #   volumes:
-  #     - ./frontend/:/usr/src/frontend/
-  #   ports:
-  #     - 3000:3000
-  #   env_file:
-  #     - .env.dev
+    networks:
+      - mynetwork
+  front:
+    build: 
+      context: frontend
+      dockerfile: Dockerfile.dev
+    volumes:
+      - ./frontend/:/usr/src/frontend/
+    ports:
+      - 3000:3000
+    depends_on:
+      - back
+    env_file:
+      - .env.dev
+    networks:
+      - mynetwork
   db:
     image: postgres:12.2-alpine
     restart: always
@@ -28,5 +34,21 @@ services:
       - postgres_data:/var/lib/postgresql/data/
     env_file:
       - .env.db
+    networks:
+      - mynetwork
+  nginx:
+    image: nginx:latest
+    container_name: nginx
+    ports:
+      - 80:80
+    depends_on:
+      - back
+      - front
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf
+    networks:
+      - mynetwork 
 volumes:
   postgres_data:
+networks:
+  mynetwork:
