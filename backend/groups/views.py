@@ -2,6 +2,7 @@ from .models import Group, GroupStudent
 from .serializers import GroupSerializer, GroupStudentSerializer
 from django.db.models import Q
 from common.viewsets import BaseFilteredViewSet
+from rest_framework import generics
 
 
 class GroupViewSet(BaseFilteredViewSet):

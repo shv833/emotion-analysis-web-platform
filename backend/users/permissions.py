@@ -23,7 +23,7 @@ class HasAccessToCourse(BasePermission):
             return True
         elif User.TEACHER in user.role and course.groups.filter(teacher=user).exists():
             return True
-        elif User.STUDENT in user.role and course.groups.filter(students=user).exists():
+        elif User.STUDENT in user.role and GroupStudent.objects.filter(group__course=course, student=user).exists():
             return True
         elif User.SUPERVISOR in user.role and course.groups.filter(supervisor=user).exists():
             return True

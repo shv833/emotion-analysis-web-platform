@@ -337,16 +337,24 @@ INTERNAL_IPS = [
 
 
 def show_toolbar(request):
-    return True
+    # return True
+    return False
 
 
 DEBUG_TOOLBAR_CONFIG = {
     "SHOW_TOOLBAR_CALLBACK": show_toolbar,
 }
 
-# CORS and CSRF
+# # CORS and CSRF prod
+# CORS_ALLOWED_ORIGINS = [f"http://{i}" for i in ALLOWED_HOSTS]
+# CSRF_COOKIE_DOMAIN = optional("CSRF_COOKIE_DOMAIN", ".localhost")
+# CSRF_TRUSTED_ORIGINS = [f"http://{i}" for i in ALLOWED_HOSTS]
+# CSRF_COOKIE_SAMESITE = "None"
+# CSRF_COOKIE_SECURE = True
+
+# CORS and CSRF dev
+CSRF_COOKIE_SECURE = False
+CSRF_COOKIE_SAMESITE = "Lax"
+CORS_ORIGIN_ALLOW_ALL = True
 CORS_ALLOWED_ORIGINS = [f"http://{i}" for i in ALLOWED_HOSTS]
-CSRF_COOKIE_DOMAIN = optional("CSRF_COOKIE_DOMAIN", ".localhost")
 CSRF_TRUSTED_ORIGINS = [f"http://{i}" for i in ALLOWED_HOSTS]
-CSRF_COOKIE_SAMESITE = "None"
-CSRF_COOKIE_SECURE = True

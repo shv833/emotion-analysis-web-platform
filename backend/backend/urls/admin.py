@@ -9,7 +9,7 @@ from django.views.generic.base import RedirectView
 
 
 urlpatterns = [
-    path("favicon.ico", RedirectView.as_view(url='images/favicon.ico')),
+    path("favicon.ico", RedirectView.as_view(url="images/favicon.ico")),
     path("schema/", SpectacularAPIView.as_view(), name="schema"),
     path("swagger/", SpectacularSwaggerView.as_view(url_name="schema"), name="swagger"),
     path("redoc/", SpectacularRedocView.as_view(url_name="schema"), name="redoc"),

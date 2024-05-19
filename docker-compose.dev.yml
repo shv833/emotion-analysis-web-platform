@@ -3,8 +3,6 @@ services:
     build: backend
     volumes:
       - ./backend/:/usr/src/backend/
-    ports:
-      - 8000:8000
     depends_on:
       - db
     env_file:
@@ -17,8 +15,6 @@ services:
       dockerfile: Dockerfile.dev
     volumes:
       - ./frontend/:/usr/src/frontend/
-    ports:
-      - 3000:3000
     depends_on:
       - back
     env_file:
@@ -28,8 +24,6 @@ services:
   db:
     image: postgres:12.2-alpine
     restart: always
-    ports:
-      - 5432:5432
     volumes:
       - postgres_data:/var/lib/postgresql/data/
     env_file:
