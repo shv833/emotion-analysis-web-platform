@@ -51,7 +51,7 @@ class User(AbstractUser):
     )
     is_active = models.BooleanField(default=True)
     date_joined = models.DateTimeField(auto_now_add=True)
-    parent_info = CKEditor5Field(blank=True, null=True)  # Тільки для студентів
+    parent_info = CKEditor5Field(blank=True, null=True)
     group = models.ForeignKey("groups.Group", on_delete=models.SET_NULL, null=True, blank=True)
 
     groups = models.ManyToManyField(
