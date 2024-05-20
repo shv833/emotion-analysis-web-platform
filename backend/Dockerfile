@@ -6,7 +6,7 @@ ENV PYTHONDONTWRITEBYTECODE=1 \
     PYTHONUNBUFFERED=1 \
     PATH="/root/.cargo/bin:${PATH}"
 
-RUN apk add --no-cache curl gcc g++ make bash dos2unix \
+RUN apk add --no-cache curl gcc g++ make bash dos2unix libffi-dev \
     && curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y \
     && pip install --upgrade pip
 

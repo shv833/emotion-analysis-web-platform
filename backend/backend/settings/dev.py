@@ -52,6 +52,8 @@ INSTALLED_APPS = [
     "drf_spectacular",
     "rest_framework",
     "rest_framework.authtoken",
+    "djoser",
+    "rest_framework_simplejwt.token_blacklist",
     "corsheaders",
     "backend",
     "users",
@@ -153,6 +155,20 @@ STATICFILES_DIRS = [
 STATIC_URL = "staticfiles/"
 STATIC_ROOT = os.path.join(PROJECT_DIR, "staticfiles")
 
+
+# Email
+
+EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
+EMAIL_HOST = optional("EMAIL_HOST")
+EMAIL_PORT = optional("EMAIL_PORT")
+EMAIL_HOST_USER = optional("EMAIL_USER")
+EMAIL_HOST_PASSWORD = optional("EMAIL_PASS")
+EMAIL_USE_TLS = False
+EMAIL_USE_SSL = True
+EMAIL_SENDER = optional("EMAIL_SENDER", EMAIL_HOST_USER)
+DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
+
+
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
 
@@ -164,6 +180,17 @@ REST_FRAMEWORK = {
         "rest_framework_simplejwt.authentication.JWTAuthentication",
     ],
     "DEFAULT_FILTER_BACKENDS": ["django_filters.rest_framework.DjangoFilterBackend"],
+}
+
+SIMPLE_JWT = {
+    "AUTH_HEADER_TYPES": ("Bearer",),
+}
+
+DJOSER = {
+    "PASSWORD_RESET_CONFIRM_URL": "auth/password/reset-password-confirmation/?uid={uid}&token={token}",
+    "ACTIVATION_URL": "#/activate/{uid}/{token}",
+    "SEND_ACTIVATION_EMAIL": False,
+    "SERIALIZERS": {},
 }
 
 SPECTACULAR_SETTINGS = {
@@ -179,16 +206,6 @@ SIMPLE_JWT = {
 }
 
 AUTH_USER_MODEL = "users.User"
-
-# EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
-# EMAIL_HOST = optional("EMAIL_HOST")
-# EMAIL_PORT = optional("EMAIL_PORT")
-# EMAIL_HOST_USER = optional("EMAIL_USER")
-# EMAIL_HOST_PASSWORD = optional("EMAIL_PASS")
-# EMAIL_USE_TLS = False
-# EMAIL_USE_SSL = True
-# EMAIL_SENDER = optional("EMAIL_SENDER", EMAIL_HOST_USER)
-# DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
 
 APPEND_SLASH = True
 
