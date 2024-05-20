@@ -27,7 +27,7 @@ const Login = () => {
         storeToken(json.access, 'access')
         storeToken(json.refresh, 'refresh')
 
-        router.push('dashboard')
+        router.push('/main')
       })
       .catch((err) => {
         const errorMessage = err.json.detail || 'An error occurred'
