@@ -1,6 +1,6 @@
 import React from 'react'
 import { useForm } from 'react-hook-form'
-import { AuthActions } from '@/app/auth/utils'
+import { AuthActions } from '@/app/(auth)/utils'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 
@@ -27,7 +27,7 @@ const Login = () => {
         storeToken(json.access, 'access')
         storeToken(json.refresh, 'refresh')
 
-        router.push('/main')
+        router.push('/profile')
       })
       .catch((err) => {
         const errorMessage = err.json.detail || 'An error occurred'
