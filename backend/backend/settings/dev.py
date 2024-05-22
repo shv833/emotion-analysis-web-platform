@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 
 from datetime import timedelta
 from pathlib import Path
+# from celery.schedules import crontab
 import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -41,6 +42,7 @@ ALLOWED_HOSTS = optional("ALLOWED_HOSTS", "localhost,127.0.0.1,[::1],0.0.0.0").s
 # Application definition
 
 INSTALLED_APPS = [
+        "daphne",
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
@@ -61,6 +63,7 @@ INSTALLED_APPS = [
     "courses",
     "debug_toolbar",
     "django_hosts",
+    # "django_celery_beat",
 ]
 
 MIDDLEWARE = [
@@ -97,6 +100,7 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = "backend.wsgi.application"
+ASGI_APPLICATION = "backend.asgi.application"
 
 
 # Database
@@ -352,16 +356,6 @@ INTERNAL_IPS = [
     "127.0.0.1",
 ]
 
-
-def show_toolbar(request):
-    # return True
-    return False
-
-
-DEBUG_TOOLBAR_CONFIG = {
-    "SHOW_TOOLBAR_CALLBACK": show_toolbar,
-}
-
 # # CORS and CSRF prod
 # CORS_ALLOWED_ORIGINS = [f"http://{i}" for i in ALLOWED_HOSTS]
 # CSRF_COOKIE_DOMAIN = optional("CSRF_COOKIE_DOMAIN", ".localhost")
@@ -375,3 +369,40 @@ CSRF_COOKIE_SAMESITE = "Lax"
 CORS_ORIGIN_ALLOW_ALL = True
 CORS_ALLOWED_ORIGINS = [f"http://{i}" for i in ALLOWED_HOSTS]
 CSRF_TRUSTED_ORIGINS = [f"http://{i}" for i in ALLOWED_HOSTS]
+
+
+DEFAULT_FILE_STORAGE = "storages.backends.s3boto3.S3Boto3Storage"
+
+
+# CELERY_BROKER_URL = "redis://redis:6379/0"
+# CELERY_TIMEZONE = "UTC"
+
+# CELERY_BEAT_SCHEDULE = {
+#     "delete_expired_tokens_every_week": {
+#         "task": "backend.tasks.delete_expired_tokens",
+#         "schedule": crontab(hour=3, minute=0),
+#     },
+# }
+
+
+if DEBUG:
+    def show_toolbar(request):
+        return True
+
+    DEBUG_TOOLBAR_CONFIG = {
+        "SHOW_TOOLBAR_CALLBACK": show_toolbar,
+    }
+    MINIO_ACCESS_KEY = optional("MINIO_ROOT_USER")
+    MINIO_SECRET_KEY = optional("MINIO_ROOT_PASSWORD")
+    MINIO_BUCKET_NAME = optional("MINIO_BUCKET_NAME")
+    MINIO_ENDPOINT = optional("MINIO_ENDPOINT")
+
+    AWS_ACCESS_KEY_ID = MINIO_ACCESS_KEY
+    AWS_SECRET_ACCESS_KEY = MINIO_SECRET_KEY
+    AWS_STORAGE_BUCKET_NAME = MINIO_BUCKET_NAME
+    AWS_S3_ENDPOINT_URL = MINIO_ENDPOINT
+    AWS_S3_URL_PROTOCOL = "http:"
+    AWS_S3_CUSTOM_DOMAIN = f"localhost/{MINIO_BUCKET_NAME}"
+    AWS_DEFAULT_ACL = None
+    AWS_QUERYSTRING_AUTH = True
+    AWS_S3_FILE_OVERWRITE = False

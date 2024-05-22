@@ -12,3 +12,8 @@ django-hosts
 django-debug-toolbar
 djoser
 social-auth-app-django
+django-storages
+boto3
+channels[daphne]
+# celery[redis]
+# django_celery_beat

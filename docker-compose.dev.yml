@@ -7,6 +7,7 @@ services:
       - db
     env_file:
       - .env.dev
+      - minio.env
     networks:
       - mynetwork
   front:
@@ -30,6 +31,33 @@ services:
       - .env.db
     networks:
       - mynetwork
+  minio:
+    image: minio/minio
+    hostname: "minio"
+    volumes:
+      - minio_data:/minio_files
+    env_file:
+      - minio.env
+    command: 'minio server /minio_files --console-address ":9001"'
+    ports:
+      - 9000:9000
+      - 9001:9001
+    networks:
+      - mynetwork
+  createbuckets:
+    image: minio/mc
+    depends_on:
+      - minio
+    env_file:
+      - minio.env
+    entrypoint: >
+      /bin/sh -c "
+      /usr/bin/mc config host add myminio http://minio:9000 minioadmin minioadmin;
+      /usr/bin/mc mb --quiet myminio/filestorage;
+      /usr/bin/mc anonymous set public myminio/filestorage;
+      "
+    networks:
+      - mynetwork
   nginx:
     image: nginx:latest
     container_name: nginx
@@ -41,8 +69,35 @@ services:
     volumes:
       - ./nginx.conf:/etc/nginx/nginx.conf
     networks:
-      - mynetwork 
+      - mynetwork
+  # celeryworker:
+  #   build: backend
+  #   command: celeryworker
+  #   volumes:
+  #     - ./backend/:/usr/src/backend/
+  #   depends_on:
+  #     - back
+  #     - redis
+  #   env_file:
+  #     - .env.dev
+  #   networks:
+  #     - mynetwork
+  # celerybeat:
+  #   build: backend
+  #   command: celerybeat
+  #   volumes:
+  #     - ./backend/:/usr/src/backend/
+  #   depends_on:
+  #     - back
+  #     - redis
+  #   env_file:
+  #     - .env.dev
+  #   networks:
+  #     - mynetwork
+  # redis:
+  #   image: "redis:alpine"
 volumes:
   postgres_data:
+  minio_data:
 networks:
   mynetwork:

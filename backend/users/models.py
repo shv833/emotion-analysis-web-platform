@@ -43,7 +43,7 @@ class User(AbstractUser):
     phone_number = models.CharField(max_length=20)
     birthday = models.DateField(blank=True, null=True)
     email = models.EmailField(unique=True)
-    avatar = models.ImageField(upload_to="avatars/", blank=True, null=True)
+    avatar = models.ImageField(upload_to="media/avatars/", blank=True, null=True)
     role = ArrayField(
         models.IntegerField(choices=ROLE_CHOICES, blank=True),
         default=[STUDENT],
