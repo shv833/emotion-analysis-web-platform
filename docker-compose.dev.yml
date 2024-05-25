@@ -94,8 +94,10 @@ services:
   #     - .env.dev
   #   networks:
   #     - mynetwork
-  # redis:
-  #   image: "redis:alpine"
+  redis:
+    image: "redis:alpine"
+    networks:
+      - mynetwork
 volumes:
   postgres_data:
   minio_data:

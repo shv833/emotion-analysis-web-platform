@@ -15,5 +15,6 @@ social-auth-app-django
 django-storages
 boto3
 channels[daphne]
+channels-redis
 # celery[redis]
 # django_celery_beat

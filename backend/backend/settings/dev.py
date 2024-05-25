@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 
 from datetime import timedelta
 from pathlib import Path
+
 # from celery.schedules import crontab
 import os
 
@@ -42,7 +43,7 @@ ALLOWED_HOSTS = optional("ALLOWED_HOSTS", "localhost,127.0.0.1,[::1],0.0.0.0").s
 # Application definition
 
 INSTALLED_APPS = [
-        "daphne",
+    "daphne",
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
@@ -61,8 +62,10 @@ INSTALLED_APPS = [
     "users",
     "groups",
     "courses",
+    "video_calls",
     "debug_toolbar",
     "django_hosts",
+    "channels",
     # "django_celery_beat",
 ]
 
@@ -356,19 +359,12 @@ INTERNAL_IPS = [
     "127.0.0.1",
 ]
 
-# # CORS and CSRF prod
-# CORS_ALLOWED_ORIGINS = [f"http://{i}" for i in ALLOWED_HOSTS]
-# CSRF_COOKIE_DOMAIN = optional("CSRF_COOKIE_DOMAIN", ".localhost")
-# CSRF_TRUSTED_ORIGINS = [f"http://{i}" for i in ALLOWED_HOSTS]
-# CSRF_COOKIE_SAMESITE = "None"
-# CSRF_COOKIE_SECURE = True
-
-# CORS and CSRF dev
-CSRF_COOKIE_SECURE = False
-CSRF_COOKIE_SAMESITE = "Lax"
-CORS_ORIGIN_ALLOW_ALL = True
+# CORS and CSRF prod
 CORS_ALLOWED_ORIGINS = [f"http://{i}" for i in ALLOWED_HOSTS]
+CSRF_COOKIE_DOMAIN = optional("CSRF_COOKIE_DOMAIN", ".localhost")
 CSRF_TRUSTED_ORIGINS = [f"http://{i}" for i in ALLOWED_HOSTS]
+CSRF_COOKIE_SAMESITE = "None"
+CSRF_COOKIE_SECURE = True
 
 
 DEFAULT_FILE_STORAGE = "storages.backends.s3boto3.S3Boto3Storage"
@@ -384,8 +380,21 @@ DEFAULT_FILE_STORAGE = "storages.backends.s3boto3.S3Boto3Storage"
 #     },
 # }
 
+REDIS_HOST = optional("REDIS_HOST", "redis")
+REDIS_PORT = optional("REDIS_PORT", "6379")
+
+CHANNEL_LAYERS = {
+    "default": {
+        "BACKEND": "channels_redis.core.RedisChannelLayer",
+        "CONFIG": {
+            "hosts": [(REDIS_HOST, REDIS_PORT)],
+        },
+    },
+}
+
 
 if DEBUG:
+
     def show_toolbar(request):
         return True
 
@@ -396,6 +405,12 @@ if DEBUG:
     MINIO_SECRET_KEY = optional("MINIO_ROOT_PASSWORD")
     MINIO_BUCKET_NAME = optional("MINIO_BUCKET_NAME")
     MINIO_ENDPOINT = optional("MINIO_ENDPOINT")
+
+    CSRF_COOKIE_SECURE = False
+    CSRF_COOKIE_SAMESITE = "Lax"
+    CORS_ORIGIN_ALLOW_ALL = True
+    CORS_ALLOWED_ORIGINS = [f"http://{i}" for i in ALLOWED_HOSTS]
+    CSRF_TRUSTED_ORIGINS = [f"http://{i}" for i in ALLOWED_HOSTS]
 
     AWS_ACCESS_KEY_ID = MINIO_ACCESS_KEY
     AWS_SECRET_ACCESS_KEY = MINIO_SECRET_KEY

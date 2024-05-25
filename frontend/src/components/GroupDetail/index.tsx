@@ -36,6 +36,12 @@ const GroupDetail: React.FC<GroupDetailProps> = ({ group }) => {
       <h1 className="text-3xl font-bold mb-4">{group.title}</h1>
       <p className="text-gray-700">{group.description}</p>
       <p className="text-gray-700">Course: {group.course}</p>
+      <Link
+        href={`/groups/${group.id}/online-lesson`}
+        className="inline-block mt-4 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-700"
+      >
+        Join online lesson
+      </Link>
       <p className="text-gray-700">
         Teacher: {group.teacher.first_name} {group.teacher.last_name}
       </p>
