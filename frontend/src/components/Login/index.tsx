@@ -21,18 +21,22 @@ const Login = () => {
 
   const { login, storeToken } = AuthActions()
 
-  const onSubmit = (data: FormData) => {
-    login(data.username, data.password)
-      .json((json) => {
+  const onSubmit = async (data: FormData) => {
+    try {
+      const response = await login(data.username, data.password).res()
+      const json = await response.json()
+
+      if (response.ok) {
         storeToken(json.access, 'access')
         storeToken(json.refresh, 'refresh')
-
         router.push('/profile')
-      })
-      .catch((err) => {
-        const errorMessage = err.json.detail || 'An error occurred'
+      } else {
+        const errorMessage = json.detail || 'An error occurred'
         setError('root', { type: 'manual', message: errorMessage })
-      })
+      }
+    } catch (err) {
+      setError('root', { type: 'manual', message: 'An error occurred' })
+    }
   }
 
   return (

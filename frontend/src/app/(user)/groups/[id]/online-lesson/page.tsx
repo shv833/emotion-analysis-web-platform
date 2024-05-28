@@ -25,6 +25,7 @@ const OnlineLessonPage = ({ params }: Props) => {
 
       webSocket.current.onopen = () => {
         console.log('WebSocket connection opened')
+        // Start video call setup
         setupWebRTC()
       }
 
@@ -86,6 +87,7 @@ const OnlineLessonPage = ({ params }: Props) => {
         }
       }
 
+      // Create and send an offer
       const offer = await peerConnection.current.createOffer()
       await peerConnection.current.setLocalDescription(offer)
       if (webSocket.current) {
@@ -139,5 +141,4 @@ const OnlineLessonPage = ({ params }: Props) => {
     </div>
   )
 }
-
 export default OnlineLessonPage
